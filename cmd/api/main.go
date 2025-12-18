@@ -2,21 +2,40 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/WanKapef/go-api/internal/config"
+	"github.com/WanKapef/go-api/internal/database"
+	"github.com/WanKapef/go-api/internal/handler"
+	"github.com/WanKapef/go-api/internal/httpx"
+	"github.com/WanKapef/go-api/internal/middleware"
+	"github.com/WanKapef/go-api/internal/repository"
+	"github.com/WanKapef/go-api/internal/service"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
 )
 
 func main() {
 	cfg := config.Load()
 
-	r := gin.Default()
+	// conecta banco
+	db := database.ConnectSQLite(cfg.DatabasePath)
+	defer db.Close()
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok"})
-	})
+	// instancia dependências
+	userRepo := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+
+	router := mux.NewRouter()
+
+	router.Use(middleware.Logger)
+
+	router.HandleFunc("/users", userHandler.Create).Methods("POST")
+	router.HandleFunc("/users", userHandler.List).Methods("GET")
+	router.HandleFunc("/users", userHandler.Update).Methods("PUT")
+	router.HandleFunc("/users/{id}", httpx.WithID(userHandler.Delete)).Methods("DELETE")
 
 	log.Println("API rodando na porta", cfg.Port)
-	r.Run(":" + cfg.Port)
+	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))
 }
