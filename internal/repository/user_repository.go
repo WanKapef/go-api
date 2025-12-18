@@ -14,6 +14,27 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
+// Create
+func (r *UserRepository) Create(user *model.User) error {
+	result, err := r.db.Exec(
+		`INSERT INTO users (name, email) VALUES (?, ?)`,
+		user.Name,
+		user.Email,
+	)
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	user.ID = id
+	return nil
+}
+
+// Read
 func (r *UserRepository) FindAll() ([]model.User, error) {
 	rows, err := r.db.Query(`SELECT id, name, email FROM users`)
 	if err != nil {
@@ -29,4 +50,21 @@ func (r *UserRepository) FindAll() ([]model.User, error) {
 	}
 
 	return users, nil
+}
+
+// Update
+func (r *UserRepository) Update(user *model.User) error {
+	_, err := r.db.Exec(
+		`UPDATE users SET name = ?, email = ? WHERE id = ?`,
+		user.Name,
+		user.Email,
+		user.ID,
+	)
+	return err
+}
+
+// Delete
+func (r *UserRepository) Delete(id int64) error {
+	_, err := r.db.Exec(`DELETE FROM users WHERE id = ?`, id)
+	return err
 }
