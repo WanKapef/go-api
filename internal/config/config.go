@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	Port string
+	Port         string
+	DatabasePath string
 }
 
 func Load() *Config {
@@ -22,7 +23,13 @@ func Load() *Config {
 		port = "8080" // Porta padrão
 	}
 
+	databasePath := os.Getenv("DATABASE_PATH")
+	if databasePath == "" {
+		log.Fatal("DATABASE_PATH não definido nas variáveis de ambiente")
+	}
+
 	return &Config{
-		Port: port,
+		Port:         port,
+		DatabasePath: databasePath,
 	}
 }
