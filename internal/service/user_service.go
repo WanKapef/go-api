@@ -18,7 +18,7 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 // Create
 func (s *UserService) CreateUser(user *model.User) error {
 	if user.Name == "" || user.Email == "" {
-		return errors.New("name and email are required")
+		return errors.New("nome e email são obrigatórios")
 	}
 
 	return s.repo.Create(user)
@@ -38,13 +38,22 @@ func (s *UserService) ListUsers() ([]model.User, error) {
 	return users, nil
 }
 
+func (s *UserService) ListByID(id int64) (*model.User, error) {
+	user, err := s.repo.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 // Update
 func (s *UserService) UpdateUser(user *model.User) error {
 	if user.ID == 0 {
-		return errors.New("user ID is required")
+		return errors.New("ID do usuário é obrigatório")
 	}
 	if user.Name == "" || user.Email == "" {
-		return errors.New("name and email are required")
+		return errors.New("nome e email são obrigatórios")
 	}
 
 	return s.repo.Update(user)
@@ -53,7 +62,7 @@ func (s *UserService) UpdateUser(user *model.User) error {
 // Delete
 func (s *UserService) DeleteUser(userID int64) error {
 	if userID == 0 {
-		return errors.New("user ID is required")
+		return errors.New("ID do usuário é obrigatório")
 	}
 
 	return s.repo.Delete(userID)

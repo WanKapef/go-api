@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/WanKapef/go-api/internal/model"
 )
@@ -50,6 +51,26 @@ func (r *UserRepository) FindAll() ([]model.User, error) {
 	}
 
 	return users, nil
+}
+
+func (r *UserRepository) FindByID(id int64) (*model.User, error) {
+	var u model.User
+	rows, err := r.db.Query(`SELECT id, name, email FROM users WHERE id = ?`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return nil, errors.New("usuário não encontrado")
+	}
+
+	err = rows.Scan(&u.ID, &u.Name, &u.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &u, nil
 }
 
 // Update

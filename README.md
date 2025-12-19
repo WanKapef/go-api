@@ -140,6 +140,30 @@ GET /users
 
 ---
 
+### 🔎 Buscar usuário por ID
+
+```http
+GET /users/{id}
+```
+
+Exemplo:
+
+```bash
+curl http://localhost:8080/users/1
+```
+
+Resposta:
+
+```json
+{
+  "id": 1,
+  "name": "Wan",
+  "email": "wan@email.com"
+}
+```
+
+---
+
 ### ✏️ Atualizar usuário
 
 ```http
@@ -179,6 +203,7 @@ As rotas são registradas diretamente no `main.go`, mantendo:
 * Handlers sem dependência de framework
 
 ```go
+router.HandleFunc("/users/{id}", httpx.WithID(userHandler.GetByID)).Methods("GET")
 router.HandleFunc("/users/{id}", httpx.WithID(userHandler.Delete)).Methods("DELETE")
 ```
 
@@ -208,19 +233,24 @@ Middleware HTTP customizado, inspirado no Gin:
 Exemplo de log:
 
 ```
-[GIN] 200 | 1.23ms | POST   /users
+[GIN] 200 | 1.23ms | GET    /users/1
 ```
 
 ---
 
 ## 🧪 Próximos passos sugeridos
 
-* [ ] GET `/users/{id}`
-* [ ] Paginação (`limit`, `offset`)
-* [ ] Middleware de erro em JSON
+* [✅] GET `/users/{id}`
+* [🧑‍💻] Paginação (`limit`, `offset`)
+* [ ] Seeds para popular BD
+* [ ] Filtros de busca
+* [ ] Middleware de erro padronizado em JSON
 * [ ] Testes HTTP (`httptest`)
 * [ ] Request ID
 * [ ] Autenticação JWT
+* [ ] Swagger / OpenAPI
+
+---
 
 ## 👤 Autor
 

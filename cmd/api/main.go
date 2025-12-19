@@ -33,6 +33,7 @@ func main() {
 
 	router.HandleFunc("/users", userHandler.Create).Methods("POST")
 	router.HandleFunc("/users", userHandler.List).Methods("GET")
+	router.HandleFunc("/users/{id}", httpx.WithID(userHandler.ListByID)).Methods("GET")
 	router.HandleFunc("/users", userHandler.Update).Methods("PUT")
 	router.HandleFunc("/users/{id}", httpx.WithID(userHandler.Delete)).Methods("DELETE")
 
