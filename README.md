@@ -240,8 +240,8 @@ Exemplo de log:
 
 ## 🧪 Próximos passos sugeridos
 
-* [✅] GET `/users/{id}`
-* [🧑‍💻] Paginação (`limit`, `offset`)
+* [x] GET `/users/{id}`
+* [ ] Paginação (`limit`, `offset`)
 * [ ] Seeds para popular BD
 * [ ] Filtros de busca
 * [ ] Middleware de erro padronizado em JSON
