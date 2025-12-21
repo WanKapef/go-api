@@ -25,7 +25,7 @@ func (s *UserService) CreateUser(user *model.User) error {
 }
 
 // Read
-func (s *UserService) ListUsers(limit, offset, page int) ([]model.User, error) {
+func (s *UserService) ListUsers(limit, offset, page int, name, email, search string) ([]model.User, error) {
 	// validação de parâmetros
 	if page > 0 && offset > 0 {
 		return nil, errors.New("use page ou offset, não ambos")
@@ -45,7 +45,7 @@ func (s *UserService) ListUsers(limit, offset, page int) ([]model.User, error) {
 		offset = 0
 	}
 
-	users, err := s.repo.List(limit, offset)
+	users, err := s.repo.List(limit, offset, name, email, search)
 
 	if err != nil {
 		return nil, err

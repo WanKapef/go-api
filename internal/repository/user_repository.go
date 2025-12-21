@@ -36,8 +36,31 @@ func (r *UserRepository) Create(user *model.User) error {
 }
 
 // Read
-func (r *UserRepository) List(limit, offset int) ([]model.User, error) {
-	rows, err := r.db.Query(`SELECT id, name, email FROM users LIMIT ? OFFSET ?`, limit, offset)
+func (r *UserRepository) List(limit, offset int, name, email, search string) ([]model.User, error) {
+
+	query := `SELECT id, name, email FROM users WHERE 1=1`
+
+	var args []any
+
+	if name != "" {
+		query += " AND name LIKE ?"
+		args = append(args, "%"+name+"%")
+	}
+
+	if email != "" {
+		query += " AND email LIKE ?"
+		args = append(args, "%"+email+"%")
+	}
+
+	if search != "" {
+		query += " AND (name LIKE ? OR email LIKE ?)"
+		args = append(args, "%"+search+"%", "%"+search+"%")
+	}
+
+	query += " ORDER BY id LIMIT ? OFFSET ?"
+	args = append(args, limit, offset)
+
+	rows, err := r.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +70,9 @@ func (r *UserRepository) List(limit, offset int) ([]model.User, error) {
 
 	for rows.Next() {
 		var u model.User
-		rows.Scan(&u.ID, &u.Name, &u.Email)
+		if err := rows.Scan(&u.ID, &u.Name, &u.Email); err != nil {
+			return nil, err
+		}
 		users = append(users, u)
 	}
 

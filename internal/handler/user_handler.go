@@ -44,7 +44,11 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	offset, _ := strconv.Atoi(query.Get("offset"))
 	page, _ := strconv.Atoi(query.Get("page"))
 
-	users, err := h.service.ListUsers(limit, offset, page)
+	name := query.Get("name")
+	email := query.Get("email")
+	search := query.Get("search")
+
+	users, err := h.service.ListUsers(limit, offset, page, name, email, search)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
