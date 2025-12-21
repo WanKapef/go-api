@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/WanKapef/go-api/internal/model"
 	"github.com/WanKapef/go-api/internal/service"
@@ -37,7 +38,13 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 // Read
 func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
-	users, err := h.service.ListUsers()
+	query := r.URL.Query()
+
+	limit, _ := strconv.Atoi(query.Get("limit"))
+	offset, _ := strconv.Atoi(query.Get("offset"))
+	page, _ := strconv.Atoi(query.Get("page"))
+
+	users, err := h.service.ListUsers(limit, offset, page)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

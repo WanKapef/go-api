@@ -25,8 +25,28 @@ func (s *UserService) CreateUser(user *model.User) error {
 }
 
 // Read
-func (s *UserService) ListUsers() ([]model.User, error) {
-	users, err := s.repo.FindAll()
+func (s *UserService) ListUsers(limit, offset, page int) ([]model.User, error) {
+	// validação de parâmetros
+	if page > 0 && offset > 0 {
+		return nil, errors.New("use page ou offset, não ambos")
+	}
+	// valores padrão para paginação
+	if limit <= 0 {
+		limit = 10
+	}
+	if limit > 100 {
+		limit = 100
+	}
+	// traduz page para offset
+	if page > 0 {
+		offset = (page - 1) * limit
+	}
+	if offset < 0 {
+		offset = 0
+	}
+
+	users, err := s.repo.List(limit, offset)
+
 	if err != nil {
 		return nil, err
 	}

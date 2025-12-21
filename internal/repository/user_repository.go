@@ -36,14 +36,15 @@ func (r *UserRepository) Create(user *model.User) error {
 }
 
 // Read
-func (r *UserRepository) FindAll() ([]model.User, error) {
-	rows, err := r.db.Query(`SELECT id, name, email FROM users`)
+func (r *UserRepository) List(limit, offset int) ([]model.User, error) {
+	rows, err := r.db.Query(`SELECT id, name, email FROM users LIMIT ? OFFSET ?`, limit, offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	var users []model.User
+
 	for rows.Next() {
 		var u model.User
 		rows.Scan(&u.ID, &u.Name, &u.Email)
