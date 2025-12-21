@@ -201,6 +201,60 @@ curl -X DELETE http://localhost:8080/users/1
 
 ---
 
+#### Paginação
+
+Use os query parameters `limit` e `offset` ou `limit` e `page` para paginar resultados:
+
+```http
+GET /users?limit=10&offset=0
+```
+ou
+```http
+GET /users?limit=10&page=2
+```
+
+Exemplos:
+
+```bash
+curl "http://localhost:8080/users?limit=10&offset=20"
+```
+```bash
+curl "http://localhost:8080/users?limit=10&page=2"
+```
+
+Resposta:
+
+```json
+{
+   "data": [
+      {"id": 21, "name": "User 1", "email": "user1@email.com"},
+      {"id": 22, "name": "User 2", "email": "user2@email.com"}
+   ]
+}
+```
+
+#### Filtros
+
+Filtre usuários por nome ou email usando query parameters:
+
+```http
+GET /users?name=Wan&email=wan@email.com
+```
+
+Exemplo:
+
+```bash
+curl "http://localhost:8080/users?name=Wan"
+```
+
+Combinado com paginação:
+
+```bash
+curl "http://localhost:8080/users?name=Wan&limit=5&offset=0"
+```
+
+---
+
 ### Onde ficam as rotas?
 
 As rotas são registradas diretamente no `main.go`, mantendo:
@@ -249,7 +303,7 @@ Exemplo de log:
 * [x] GET `/users/{id}`
 * [x] Paginação (`limit`, `offset`)
 * [x] Seeds para popular BD
-* [ ] Filtros de busca
+* [x] Filtros de busca
 * [ ] Middleware de erro padronizado em JSON
 * [ ] Testes HTTP (`httptest`)
 * [ ] Request ID
