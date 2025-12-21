@@ -241,7 +241,7 @@ Exemplo de log:
 ## 🧪 Próximos passos sugeridos
 
 * [x] GET `/users/{id}`
-* [ ] Paginação (`limit`, `offset`)
+* [x] Paginação (`limit`, `offset`)
 * [ ] Seeds para popular BD
 * [ ] Filtros de busca
 * [ ] Middleware de erro padronizado em JSON
