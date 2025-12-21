@@ -98,9 +98,15 @@ Rodar migrations:
 migrate -database sqlite3://data/app.db -path migrations up
 ```
 
+### 3️⃣ Popular BD
+
+```bash
+go run ./cmd/seed
+```
+
 ---
 
-### 3️⃣ Subir a API
+### 4️⃣ Subir a API
 
 ```bash
 go run ./cmd/api
@@ -242,7 +248,7 @@ Exemplo de log:
 
 * [x] GET `/users/{id}`
 * [x] Paginação (`limit`, `offset`)
-* [ ] Seeds para popular BD
+* [x] Seeds para popular BD
 * [ ] Filtros de busca
 * [ ] Middleware de erro padronizado em JSON
 * [ ] Testes HTTP (`httptest`)
