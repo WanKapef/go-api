@@ -304,7 +304,7 @@ Exemplo de log:
 * [x] Paginação (`limit`, `offset`)
 * [x] Seeds para popular BD
 * [x] Filtros de busca
-* [ ] Middleware de erro padronizado em JSON
+* [x] Middleware de erro padronizado em JSON
 * [ ] Testes HTTP (`httptest`)
 * [ ] Request ID
 * [ ] Autenticação JWT
