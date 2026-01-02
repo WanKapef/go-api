@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -18,26 +19,24 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 }
 
 // Create
-func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) error {
 	var user model.User
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return err
 	}
 
 	if err := h.service.CreateUser(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
+	return json.NewEncoder(w).Encode(user)
 }
 
 // Read
-func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 
 	limit, _ := strconv.Atoi(query.Get("limit"))
@@ -50,53 +49,48 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	users, err := h.service.ListUsers(limit, offset, page, name, email, search)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(users)
+	return json.NewEncoder(w).Encode(users)
 }
 
-func (h *UserHandler) ListByID(w http.ResponseWriter, r *http.Request, id int64) {
+func (h *UserHandler) ListByID(w http.ResponseWriter, r *http.Request, id int64) error {
 	user, err := h.service.ListByID(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	return json.NewEncoder(w).Encode(user)
 }
 
 // Update
-func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) error {
 	var user model.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return err
 	}
 
 	if err := h.service.UpdateUser(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	return json.NewEncoder(w).Encode(user)
 }
 
 // Delete
-func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request, id int64) {
+func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request, id int64) error {
 	if id <= 0 {
-		http.Error(w, "ID inválido", http.StatusBadRequest)
-		return
+		return errors.New("ID inválido")
 	}
 
 	if err := h.service.DeleteUser(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+	return nil
 }

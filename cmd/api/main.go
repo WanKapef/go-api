@@ -31,11 +31,11 @@ func main() {
 
 	router.Use(middleware.Logger)
 
-	router.HandleFunc("/users", userHandler.Create).Methods("POST")
-	router.HandleFunc("/users", userHandler.List).Methods("GET")
-	router.HandleFunc("/users/{id}", httpx.WithID(userHandler.ListByID)).Methods("GET")
-	router.HandleFunc("/users", userHandler.Update).Methods("PUT")
-	router.HandleFunc("/users/{id}", httpx.WithID(userHandler.Delete)).Methods("DELETE")
+	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Create)).Methods("POST")
+	router.Handle("/users", middleware.ErrorMiddleware(userHandler.List)).Methods("GET")
+	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(userHandler.ListByID))).Methods("GET")
+	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Update)).Methods("PUT")
+	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(userHandler.Delete))).Methods("DELETE")
 
 	log.Println("API rodando na porta", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, router))
