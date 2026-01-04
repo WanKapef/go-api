@@ -319,7 +319,7 @@ Exemplo de log:
 * [x] Filtros de busca
 * [x] Middleware de erro padronizado em JSON
 * [x] Testes HTTP (`httptest`)
-* [ ] Request ID
+* [x] Request ID
 * [ ] Autenticação JWT
 * [ ] Swagger / OpenAPI
 
