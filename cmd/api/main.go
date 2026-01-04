@@ -26,15 +26,18 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
+	authHandler := handler.NewAuthHandler(userService)
 
 	router := mux.NewRouter()
 
 	router.Use(middleware.RequestID)
 	router.Use(middleware.Logger)
 
+	router.Handle("/login", middleware.ErrorMiddleware(authHandler.Login)).Methods("POST")
+
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Create)).Methods("POST")
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.List)).Methods("GET")
-	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(userHandler.ListByID))).Methods("GET")
+	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(userHandler.GetByID))).Methods("GET")
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Update)).Methods("PUT")
 	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(userHandler.Delete))).Methods("DELETE")
 

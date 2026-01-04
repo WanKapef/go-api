@@ -56,8 +56,8 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) error {
 	return json.NewEncoder(w).Encode(users)
 }
 
-func (h *UserHandler) ListByID(w http.ResponseWriter, r *http.Request, id int64) error {
-	user, err := h.service.ListByID(id)
+func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request, id int64) error {
+	user, err := h.service.FindByID(id)
 	if err != nil {
 		return err
 	}

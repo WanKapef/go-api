@@ -58,8 +58,17 @@ func (s *UserService) ListUsers(limit, offset, page int, name, email, search str
 	return users, nil
 }
 
-func (s *UserService) ListByID(id int64) (*model.User, error) {
+func (s *UserService) FindByID(id int64) (*model.User, error) {
 	user, err := s.repo.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s *UserService) FindByEmail(email string) (*model.User, error) {
+	user, err := s.repo.FindByEmail(email)
 	if err != nil {
 		return nil, err
 	}

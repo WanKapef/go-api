@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Port         string
 	DatabasePath string
+	JWTSecret    string
 }
 
 func Load() *Config {

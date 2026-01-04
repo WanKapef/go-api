@@ -24,7 +24,7 @@ func TestGetUserByID(t *testing.T) {
 
 	router := mux.NewRouter()
 	router.Handle("/users", middleware.ErrorMiddleware(h.Create)).Methods(http.MethodPost)
-	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(h.ListByID))).Methods(http.MethodGet)
+	router.Handle("/users/{id}", middleware.ErrorMiddleware(httpx.WithID(h.GetByID))).Methods(http.MethodGet)
 
 	// create user
 	w1 := httptest.NewRecorder()

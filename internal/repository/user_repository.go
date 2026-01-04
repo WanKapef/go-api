@@ -99,6 +99,26 @@ func (r *UserRepository) FindByID(id int64) (*model.User, error) {
 	return &u, nil
 }
 
+func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
+	var u model.User
+	rows, err := r.db.Query(`SELECT id, name, email FROM users WHERE email = ?`, email)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return nil, errors.New("usuário não encontrado")
+	}
+
+	err = rows.Scan(&u.ID, &u.Name, &u.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &u, nil
+}
+
 // Update
 func (r *UserRepository) Update(user *model.User) error {
 	_, err := r.db.Exec(
