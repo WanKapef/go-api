@@ -104,8 +104,6 @@ migrate -database sqlite3://data/app.db -path migrations up
 go run ./cmd/seed
 ```
 
----
-
 ### 4️⃣ Subir a API
 
 ```bash
@@ -116,6 +114,21 @@ A API ficará disponível em:
 
 ```
 http://localhost:8080
+```
+
+---
+
+### *Opcional* 
+
+Executar todos os testes:
+
+```bash
+go test ./...
+```
+
+Executar com saída detalhada:
+```bash
+go test -v ./...
 ```
 
 ---
@@ -305,7 +318,7 @@ Exemplo de log:
 * [x] Seeds para popular BD
 * [x] Filtros de busca
 * [x] Middleware de erro padronizado em JSON
-* [ ] Testes HTTP (`httptest`)
+* [x] Testes HTTP (`httptest`)
 * [ ] Request ID
 * [ ] Autenticação JWT
 * [ ] Swagger / OpenAPI
@@ -316,4 +329,3 @@ Exemplo de log:
 
 **WanKapef**
 Projeto de estudo e base para APIs REST em Go.
-
