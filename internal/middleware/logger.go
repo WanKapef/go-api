@@ -39,15 +39,21 @@ func Logger(next http.Handler) http.Handler {
 		duration := time.Since(start)
 		statusColor := colorByStatus(rw.status)
 		methodColor := colorByMethod(r.Method)
+		reqID := r.Context().Value(RequestIDKey)
+		reqIDStr := "-"
+		if reqID != nil {
+			reqIDStr = reqID.(string)
+		}
 
 		fmt.Printf(
-			"%s[API]%s %s | %s%3d%s | %8s | %s%-6s%s %s\n",
+			"%s[API]%s %s | %s%3d%s | %8s | %s%-6s%s %s | req_id=%s\n",
 			blue, reset,
 			time.Now().Format("2006/01/02 - 15:04:05"),
 			statusColor, rw.status, reset,
 			duration,
 			methodColor, r.Method, reset,
 			r.URL.Path,
+			reqIDStr,
 		)
 	})
 }
