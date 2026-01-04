@@ -29,6 +29,7 @@ func main() {
 
 	router := mux.NewRouter()
 
+	router.Use(middleware.RequestID)
 	router.Use(middleware.Logger)
 
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Create)).Methods("POST")
