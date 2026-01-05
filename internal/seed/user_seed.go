@@ -27,8 +27,8 @@ func UserSeed(db *sql.DB) error {
 		}
 
 		_, err = db.Exec(
-			"INSERT INTO users (name, email) VALUES (?, ?)",
-			name, email,
+			"INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+			name, email, "password123",
 		)
 		if err != nil {
 			return err

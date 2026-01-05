@@ -18,9 +18,10 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 // Create
 func (r *UserRepository) Create(user *model.User) error {
 	result, err := r.db.Exec(
-		`INSERT INTO users (name, email) VALUES (?, ?)`,
+		`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`,
 		user.Name,
 		user.Email,
+		user.Password,
 	)
 	if err != nil {
 		return err
@@ -122,9 +123,10 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 // Update
 func (r *UserRepository) Update(user *model.User) error {
 	_, err := r.db.Exec(
-		`UPDATE users SET name = ?, email = ? WHERE id = ?`,
+		`UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?`,
 		user.Name,
 		user.Email,
+		user.Password,
 		user.ID,
 	)
 	return err

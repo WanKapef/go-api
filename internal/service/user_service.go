@@ -17,8 +17,8 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 
 // Create
 func (s *UserService) CreateUser(user *model.User) error {
-	if user.Name == "" || user.Email == "" {
-		return errors.New("nome e email são obrigatórios")
+	if user.Name == "" || user.Email == "" || user.Password == "" {
+		return errors.New("nome, email e senha são obrigatórios")
 	}
 
 	return s.repo.Create(user)
@@ -81,8 +81,8 @@ func (s *UserService) UpdateUser(user *model.User) error {
 	if user.ID == 0 {
 		return errors.New("ID do usuário é obrigatório")
 	}
-	if user.Name == "" || user.Email == "" {
-		return errors.New("nome e email são obrigatórios")
+	if user.Name == "" || user.Email == "" || user.Password == "" {
+		return errors.New("nome, email e senha são obrigatórios")
 	}
 
 	return s.repo.Update(user)
