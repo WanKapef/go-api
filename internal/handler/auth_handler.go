@@ -6,6 +6,8 @@ import (
 
 	"github.com/WanKapef/go-api/internal/auth"
 	"github.com/WanKapef/go-api/internal/service"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthHandler struct {
@@ -18,13 +20,23 @@ func NewAuthHandler(s *service.UserService) *AuthHandler {
 
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) error {
 	var creds struct {
-		Email string `json:"email"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
 	}
-	json.NewDecoder(r.Body).Decode(&creds)
+	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+		//http.Error(w, "invalid request body", http.StatusBadRequest)
+		return err
+	}
 
 	user, err := h.service.FindByEmail(creds.Email)
 	if err != nil {
 		//http.Error(w, "invalid credentials", http.StatusUnauthorized)
+		return err
+	}
+
+	// compara hash com senha digitada
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password)); err != nil {
+		//http.Error(w, "invalid email or password", http.StatusUnauthorized)
 		return err
 	}
 

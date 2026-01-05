@@ -102,7 +102,7 @@ func (r *UserRepository) FindByID(id int64) (*model.User, error) {
 
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	var u model.User
-	rows, err := r.db.Query(`SELECT id, name, email FROM users WHERE email = ?`, email)
+	rows, err := r.db.Query(`SELECT id, name, email, password FROM users WHERE email = ?`, email)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 		return nil, errors.New("usuário não encontrado")
 	}
 
-	err = rows.Scan(&u.ID, &u.Name, &u.Email)
+	err = rows.Scan(&u.ID, &u.Name, &u.Email, &u.Password)
 	if err != nil {
 		return nil, err
 	}
