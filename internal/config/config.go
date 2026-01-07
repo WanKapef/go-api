@@ -29,8 +29,14 @@ func Load() *Config {
 		log.Fatal("DATABASE_PATH não definido nas variáveis de ambiente")
 	}
 
+	JWTSecret := os.Getenv("JWT_SECRET")
+	if JWTSecret == "" {
+		log.Fatal("JWT_SECRET não definido nas variáveis de ambiente")
+	}
+
 	return &Config{
 		Port:         port,
 		DatabasePath: databasePath,
+		JWTSecret:    JWTSecret,
 	}
 }

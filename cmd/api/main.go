@@ -34,6 +34,7 @@ func main() {
 	router.Use(middleware.Logger)
 
 	router.Handle("/login", middleware.ErrorMiddleware(authHandler.Login)).Methods("POST")
+	router.Handle("/me", middleware.ErrorMiddleware(middleware.JWT(authHandler.Me))).Methods("GET")
 
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.Create)).Methods("POST")
 	router.Handle("/users", middleware.ErrorMiddleware(userHandler.List)).Methods("GET")

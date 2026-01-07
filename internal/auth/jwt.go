@@ -34,7 +34,7 @@ func GenerateToken(userID int64) (string, error) {
 // valida token
 func ValidateToken(tokenStr string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return JWTSecret, nil
+		return []byte(JWTSecret), nil
 	})
 	if err != nil {
 		// erros específicos da v5
