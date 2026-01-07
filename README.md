@@ -320,7 +320,7 @@ Exemplo de log:
 * [x] Middleware de erro padronizado em JSON
 * [x] Testes HTTP (`httptest`)
 * [x] Request ID
-* [ ] Autenticação JWT
+* [x] Autenticação JWT
 * [ ] Swagger / OpenAPI
 
 ---
