@@ -321,7 +321,7 @@ Exemplo de log:
 * [x] Testes HTTP (`httptest`)
 * [x] Request ID
 * [x] Autenticação JWT
-* [ ] Swagger / OpenAPI
+* [x] Swagger / OpenAPI
 
 ---
 
