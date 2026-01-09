@@ -19,6 +19,17 @@ func NewAuthHandler(s *service.UserService) *AuthHandler {
 	return &AuthHandler{service: s}
 }
 
+// Login autentica um usuário e retorna um token JWT
+// @Summary Login
+// @Description Autentica um usuário e retorna um token JWT
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body object{email=string,password=string} true "User credentials"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /login [post]
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) error {
 	var creds struct {
 		Email    string `json:"email"`
@@ -51,6 +62,16 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) error {
 	return json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
 
+// Me retorna os dados do usuário autenticado
+// @Summary Dados do usuário autenticado
+// @Description Retorna os dados do usuário autenticado
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} model.User
+// @Failure 401 {object} map[string]string
+// @Router /me [get]
 func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) error {
 	userIDctx := r.Context().Value("userID")
 	if userIDctx == nil {

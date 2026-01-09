@@ -1,3 +1,22 @@
+// @title           Go API
+// @version         1.0
+// @description     API REST com Gorilla Mux, SQLite, JWT e Swagger.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Suporte
+// @contact.url    http://github.com/WanKapef
+// @contact.email  suporte@wan.com
+
+// @license.name  MIT
+// @license.url   https://opensource.org/licenses/MIT
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
+// @host      localhost:8080
+// @BasePath  /
+
 package main
 
 import (
@@ -12,7 +31,9 @@ import (
 	"github.com/WanKapef/go-api/internal/repository"
 	"github.com/WanKapef/go-api/internal/service"
 
+	_ "github.com/WanKapef/go-api/docs"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func main() {
@@ -29,6 +50,9 @@ func main() {
 	authHandler := handler.NewAuthHandler(userService)
 
 	router := mux.NewRouter()
+
+	// Swagger
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	router.Use(middleware.RequestID)
 	router.Use(middleware.Logger)
